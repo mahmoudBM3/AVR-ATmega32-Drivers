@@ -1,6 +1,30 @@
+/*******************************************************************************
+ * File Description:
+ * Author      : Mahmoud Sherif Mahmoud
+ * Module      : KeyPad
+ * Level  	   : Medium
+ * Description : This file abstracts the interface with the KeyPad
+ * µC		   : ATMega 32 (8-BIT)
+ * Date 	   : 8/10/2022(October)
+ *******************************************************************************/
+
 #include"gpio.h"
 #include"keypad.h"
+/**Define this Macro if the Keypad consists of only numbers and looks like this
+ * 1	2	3	4
+ * 5	6	7	8
+ * 9	10	11	12
+ * 13	14	15	16
+ * or:
+ * 1	2	3
+ * 4	5	6
+ * 7	8	9
+ * 10	11	12
+ * */
+//#define NOT_POLLING
+//static uint8 previous_state = 255;
 #define STANDARD_KEYPAD
+
 #ifndef STANDARD_KEYPAD
 #if(NUM_OF_COLS==4)
 static uint8 KEYPAD_4x4__adjustKeyNumber(uint8);
@@ -9,8 +33,10 @@ static uint8 KEYPAD_4x4__adjustKeyNumber(uint8);
 static uint8 KEYPAD_4x3__adjustKeyNumber(uint8);
 #endif
 #endif
+#ifndef	NOT_POLLING
 uint8 KEYPAD_getPressedKey(void) {
-	/**Setting ROW&COL pins as inputs**/
+	uint8 row, col;
+	/**Setting all ROW&COL pins as inputs**/
 	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID,PIN_INPUT);
 	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + 1,PIN_INPUT);
 	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + 2,PIN_INPUT);
@@ -18,36 +44,105 @@ uint8 KEYPAD_getPressedKey(void) {
 	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID,PIN_INPUT);
 	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 1,PIN_INPUT);
 	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 2,PIN_INPUT);
+	/**Enabling the fourth column if and only if the Number of columns is 4**/
 #if (NUM_OF_COLS==4)
 	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 3,PIN_INPUT);
 #endif
+
+	/**Polling until the user presses a key**/
 	while (1) {
-		uint8 row = 0, col = 0;
+		/**Scanning over each Column, setting it as output and writing the
+		 *  BUTTON_IS_PRESSED on it to detect the activated column**/
 		for (row = 0; row < NUM_OF_ROWS; row++) {
 			GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,KEYPAD_ROW_FIRST_PIN_ID + row, PIN_OUTPUT);
 			GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + row,BUTTON_IS_PRESSED);
+			/**Scanning over each column and reading the value of the pressed Key
+			 * if it corresponds to BUTTON_IS_PRESSED the value of this button is returned**/
 			for (col = 0; col < NUM_OF_COLS; col++) {
 				if (GPIO_readPin(KEYPAD_COL_PORT_ID,KEYPAD_COL_FIRST_PIN_ID + col) == BUTTON_IS_PRESSED) {
+					GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + row,BUTTON_IS_RELEASED);
 
-				#ifdef STANDARD_KEYPAD
+
+					#ifdef STANDARD_KEYPAD
 					return ((row * NUM_OF_COLS) + col + 1);
 
-				#else
-				#if(NUM_OF_COLS==4)
-					return (KEYPAD_4x4__adjustKeyNumber(
-											(row * NUM_OF_COLS) + col + 1));
-				#endif
-				#if(NUM_OF_COLS==3)
-					return (KEYPAD_4x3__adjustKeyNumber((row * NUM_OF_COLS) + col + 1));
+					#else
+						#if(NUM_OF_COLS==4)
+							return (KEYPAD_4x4__adjustKeyNumber((row * NUM_OF_COLS) + col + 1));
+						#endif
+						#if(NUM_OF_COLS==3)
+							return (KEYPAD_4x3__adjustKeyNumber((row * NUM_OF_COLS) + col + 1));
 
-				#endif
-				#endif
-					}
+						#endif
+						#endif
+				}
 			}
 			GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,KEYPAD_ROW_FIRST_PIN_ID + row, PIN_INPUT);
 		}
 	}
 }
+#else
+uint8 KEYPAD_getPressedKey(void) {
+	uint8 row, col;
+	/**Setting all ROW&COL pins as inputs**/
+	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + 1,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + 2,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + 3,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 1,
+			PIN_INPUT);
+	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 2,
+			PIN_INPUT);
+	/**Enabling the fourth column if and only if the Number of columns is 4**/
+#if (NUM_OF_COLS==4)
+	GPIO_setupPinDirection(KEYPAD_COL_PORT_ID, KEYPAD_COL_FIRST_PIN_ID + 3,
+			PIN_INPUT);
+#endif
+	/**Scanning over each Column, setting it as output and writing the
+	 *  BUTTON_IS_PRESSED on it to detect the activated column**/
+	for (row = 0; row < NUM_OF_ROWS; row++) {
+		GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
+		KEYPAD_ROW_FIRST_PIN_ID + row, PIN_OUTPUT);
+		GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + row,
+		BUTTON_IS_PRESSED);
+		/**Scanning over each column and reading the value of the pressed Key
+		 * if it corresponds to BUTTON_IS_PRESSED the value of this button is returned**/
+		for (col = 0; col < NUM_OF_COLS; col++) {
+			if (GPIO_readPin(KEYPAD_COL_PORT_ID,KEYPAD_COL_FIRST_PIN_ID + col) == BUTTON_IS_PRESSED) {
+				GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
+						KEYPAD_ROW_FIRST_PIN_ID + row, PIN_INPUT);
+				GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_ROW_FIRST_PIN_ID + row,BUTTON_IS_RELEASED);
+				if (((row * NUM_OF_COLS) + col + 1) != previous_state) {
+					previous_state = ((row * NUM_OF_COLS) + col + 1);
+#ifdef STANDARD_KEYPAD
+					return ((row * NUM_OF_COLS) + col + 1);
+
+#else
+						#if(NUM_OF_COLS==4)
+							return (KEYPAD_4x4__adjustKeyNumber((row * NUM_OF_COLS) + col + 1));
+						#endif
+						#if(NUM_OF_COLS==3)
+							return (KEYPAD_4x3__adjustKeyNumber((row * NUM_OF_COLS) + col + 1));
+
+						#endif
+						#endif
+				} else
+					return 255;
+			}
+		}
+		GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,KEYPAD_ROW_FIRST_PIN_ID + row, PIN_INPUT);
+	}
+	previous_state = 255;
+	return 255;
+}
+#endif
+
 #ifndef STANDARD_KEYPAD
 #if(NUM_OF_COLS==4)
 static uint8 KEYPAD_4x4__adjustKeyNumber(uint8 button_number) {
