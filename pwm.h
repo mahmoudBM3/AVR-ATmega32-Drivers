@@ -10,7 +10,7 @@
 #ifndef PWM_H_
 #define PWM_H_
 #include "std_types.h"
-/*PWM Clock Selecting Datatype Enum*/
+/**PWM Clock Selecting Datatype Enum**/
 #define TIMER_TOP_COUNT		255
 typedef enum {
 	PWM_NOCLK = 0,
@@ -20,7 +20,9 @@ typedef enum {
 	PWM_FCPU_256 = 4,
 	PWM_FCPU_1024 = 5,
 } PWM_ClockConfig;
-/*Function Definition*/
+/*******************************************************************************
+ * 							Function Definitions							   *
+ *******************************************************************************/
 void PWM_Timer0_Start(uint8 duty_cycle);
 
 #endif /* PWM_H_ */

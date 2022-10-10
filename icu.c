@@ -11,14 +11,16 @@
 #include"common_macros.h"
 #include <avr/io.h>
 #include<avr/interrupt.h>
-void (*g_callback_ptr)(void) = NULL_PTR;
-
+static volatile void (*g_callback_ptr)(void) = NULL_PTR;
+/*******************************************************************************
+ * 						Interrupt Service Routine							   *
+ *******************************************************************************/
 ISR(TIMER1_CAPT_vect) {
 	if (g_callback_ptr != NULL_PTR)
 		g_callback_ptr();
 }
 
-void ICU_init(ICU_ConfigType *config_ptr) {
+void ICU_init(const ICU_ConfigType *config_ptr) {
 	/**Setting the ICP1 Pin as input**/
 	CLEAR_BIT(DDRD,PD6);
 	/**Disabling Output pin**/

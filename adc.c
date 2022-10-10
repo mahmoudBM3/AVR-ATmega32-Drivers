@@ -9,9 +9,10 @@
  *******************************************************************************/
 #include "adc.h"
 /***********************************************/
-uint16 g_adcresult = 0;
-/**This functions initializes the ADCPeripheral and sets it up for the given settings in the Configuration structure**/
-void ADC_init(ADC_ConfigType *config) {
+volatile uint16 g_adcresult = 0;
+/**This functions initializes the ADCPeripheral and sets it up for the given
+ *  settings in the Configuration structure**/
+void ADC_init(const ADC_ConfigType *config) {
 
 	/**Setting Reference Voltage**/
 

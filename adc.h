@@ -46,15 +46,16 @@ typedef struct {
 		ADC_FCPU_128 = 7
 	} ADC_Prescaler;
 } ADC_ConfigType;
-extern uint16 g_adcresult;
-/**************************
- *Function Definitions*
- **************************/
+extern volatile uint16 g_adcresult;
+/*******************************************************************************
+ *							Function Definitions							   *
+ *******************************************************************************/
 
-/**This function initializes the ADC Peripheral to start working and should be called at the beginning of the main
- * to be used by all the analog sensor in the system*/
+/**This function initializes the ADC Peripheral to start working and should be
+ * called at the beginning of the mainto be used by all the analog sensor in
+ * the system*/
 
-void ADC_init(ADC_ConfigType *config);
+void ADC_init(const ADC_ConfigType *config);
 
 /**This Function reads the ADC value from the specified ADC Channel*/
 

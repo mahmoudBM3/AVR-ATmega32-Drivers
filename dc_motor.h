@@ -32,7 +32,7 @@ typedef enum {
 	STOP = 0, CLOCKWISE = 1, ANTICLOCKWISE = 2
 }DCMOTOR_STATE;
 /*******************************************************************************
- 	 	 	 	 	 	 	  Function Definitions
+ *	 	 	 	 	 	 	  Function Definitions							   *
  *******************************************************************************/
 /**This function initializes the DC Motor*/
 void DCMOTOR_init(void);

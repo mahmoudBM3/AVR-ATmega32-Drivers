@@ -11,14 +11,14 @@
 #define LM35_SENSOR_H_
 #include"std_types.h"
 #include"common_macros.h"
-/*
+/*******************************************************************************
  * GUIDE:	1-first initialize the ADC in the main function and adjust its settings in its h file
  * 			2-in the sensor h file Adjust its ADC Channel and required ADC info for conversion
  *
- * */
-/***********************************
- * 			SETTINGS
- ***********************************/
+ *******************************************************************************/
+/*******************************************************************************
+ * 								SETTINGS									   *
+ *******************************************************************************/
 /**LM35 Pin**/
 #define LM35_PIN 2
 /**Some Numbers For Conversion**/
@@ -26,7 +26,7 @@
 #define	ADC_REFERENCE		2.56
 #define SENSOR_MAX_VOLT		1.5
 #define SENSOR_MAX_TEMP		150
-/***********************************/
+/*******************************************************************************/
 
 
 /**Function Definition**/

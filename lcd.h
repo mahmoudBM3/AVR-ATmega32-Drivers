@@ -12,8 +12,8 @@
 #define LCD_H_
 #include"std_types.h"
 /*******************************************************************************
- 	 	  	  	  	  	  	  	  Settings
-********************************************************************************/
+ *	 	  	  	  	  	  	  	  Settings									   *
+ *******************************************************************************/
 /**Specifies the Bit Mode of the LCD*/
 #define LCD_DATA_MODE	8
 /**Specifies the PORT in which the DATA Bits of the LCD are connected*/
@@ -21,19 +21,19 @@
 /**Only for the 4-BIT Mode : Specifies the Pins on which the Data bits are
  * connected*/
 #if(LCD_DATA_MODE==4)
-#define LCD_DB4_PIN		PIN3_ID
-#define LCD_DB5_PIN		PIN4_ID
-#define LCD_DB6_PIN		PIN5_ID
-#define LCD_DB7_PIN		PIN6_ID
+#define LCD_DB4_PIN		PIN0_ID
+#define LCD_DB5_PIN		PIN1_ID
+#define LCD_DB6_PIN		PIN2_ID
+#define LCD_DB7_PIN		PIN3_ID
 #endif
 /**Specifies where the E and RS pins are connected*/
 #define LCD_E_PORT		PORTD_ID
-#define LCD_E_PIN		PIN2_ID
+#define LCD_E_PIN		PIN5_ID
 #define LCD_RS_PORT		PORTD_ID
-#define LCD_RS_PIN		PIN0_ID
+#define LCD_RS_PIN		PIN4_ID
 /*******************************************************************************/
 /*******************************************************************************
-							LCD Commands :
+*								LCD Commands								   *
 ********************************************************************************/
 #define LCD_CLEAR_COMMAND			0x01
 #define LCD_GO_TO_HOME				0x02
@@ -46,7 +46,7 @@
 #define LCD_SET_CURSOR_LOCATION		0x80
 /*******************************************************************************/
 /*******************************************************************************
- * 						Function Definitions
+ * 						Function Definitions								   *
  *******************************************************************************/
 /**This function initializes the LCD and should be called at the beginning of
  * the main*/

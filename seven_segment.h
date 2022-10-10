@@ -11,7 +11,7 @@
 #define SEVEN_SEGMENT_H_
 #include"std_types.h"
 /*******************************************************************************
- * 								Settings
+ * 								Settings									   *
  *******************************************************************************/
 /**Specifies the Location of the SS Data Pins whether Decoded or not, note that
  * the data pins should be connected in succession**/
@@ -30,7 +30,7 @@
 #endif
 #endif
 /*******************************************************************************
- * 							Function Definitions
+ * 							Function Definitions							   *
  *******************************************************************************/
 /**Initializes the SS and should be called at the beginning of the main**/
 void SEVEN_SEGMENT_init(void);

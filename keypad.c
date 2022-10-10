@@ -22,7 +22,7 @@
  * 10	11	12
  * */
 //#define NOT_POLLING
-//static uint8 previous_state = 255;
+
 #define STANDARD_KEYPAD
 
 #ifndef STANDARD_KEYPAD
@@ -82,6 +82,7 @@ uint8 KEYPAD_getPressedKey(void) {
 	}
 }
 #else
+static volatile uint8 previous_state = 255;
 uint8 KEYPAD_getPressedKey(void) {
 	uint8 row, col;
 	/**Setting all ROW&COL pins as inputs**/

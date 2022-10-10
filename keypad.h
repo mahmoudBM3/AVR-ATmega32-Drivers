@@ -28,7 +28,7 @@
 #define KEYPAD_COL_PORT_ID		PORTB_ID
 #define KEYPAD_COL_FIRST_PIN_ID	PIN4_ID
 /*******************************************************************************
- *  						Function Definitions
+ *  						Function Definitions							   *
  *******************************************************************************/
 uint8 KEYPAD_getPressedKey(void);
 /**Only one setting is in the C file which is the choice for Standard Keypad or

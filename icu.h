@@ -38,7 +38,7 @@ typedef struct {
  * 							Function Definitions							   *
  *******************************************************************************/
 /**This Function Initializes The ICU and makes it start working**/
-void ICU_init(ICU_ConfigType *config_ptr);
+void ICU_init(const ICU_ConfigType *config_ptr);
 /**This Function Deinitializes the ICU and makes it stop working**/
 void ICU_deinit(void);
 /**This Function Sets the Type of edge which Triggers the ICU**/
