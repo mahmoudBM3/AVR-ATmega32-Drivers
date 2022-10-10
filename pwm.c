@@ -22,4 +22,5 @@ void PWM_Timer0_Start(uint8 duty_cycle) {
 	TCCR0 = ((TCCR0 & 0xF8) | ClockSelect);
 	OCR0 =(uint8)((duty_cycle*TIMER_TOP_COUNT/100.0));;
 	return;
+
 }
