@@ -9,9 +9,10 @@
  *******************************************************************************/
 #ifndef ADC_H_
 #define ADC_H_
+#include "std_types.h"
 #include <avr/io.h>
 #include "common_macros.h"
-#include "std_types.h"
+
 /**
  * GUIDE:
  * This ADC Driver can work at all AVR ADC modes and can configure all of its settings
@@ -29,35 +30,34 @@
  * PRESCALER:	Has to be adjusted such that the ADC Frequency is between (50-200)KHz
  * */
 /**ADC Config DataType*/
-typedef struct{
+typedef struct {
 	/**This Specifies the reference for the ADC Conversion*/
 	enum {
-		AREF=0,AVCC=1,INTERNAL=3
-	}ADC_Reference;
+		AREF = 0, AVCC = 1, INTERNAL = 3
+	} ADC_Reference;
 	/**This Specifies the Prescaler for the ADC Frequency it should be adjusted such that the ADC Frequency between (50-200)MHz*/
 	enum {
-		FCPU_2=1,FCPU_4=2,FCPU_8=3,FCPU_16=4,FCPU_32=5,FCPU_64=6,FCPU_128=7
-	}ADC_Prescaler;
-}ADC_ConfigType;
-extern ADC_ConfigType g_adcconfig;
+		ADC_FCPU_2 = 1,
+		ADC_FCPU_4 = 2,
+		ADC_FCPU_8 = 3,
+		ADC_FCPU_16 = 4,
+		ADC_FCPU_32 = 5,
+		ADC_FCPU_64 = 6,
+		ADC_FCPU_128 = 7
+	} ADC_Prescaler;
+} ADC_ConfigType;
 extern uint16 g_adcresult;
 /**************************
-  *Function Definitions*
+ *Function Definitions*
  **************************/
-
 
 /**This function initializes the ADC Peripheral to start working and should be called at the beginning of the main
  * to be used by all the analog sensor in the system*/
 
-
-void   ADC_init(ADC_ConfigType *config);
-
+void ADC_init(ADC_ConfigType *config);
 
 /**This Function reads the ADC value from the specified ADC Channel*/
 
-
 uint16 ADC_readChannel(uint8 ch_num);
-
-
 
 #endif /* ADC_H_ */

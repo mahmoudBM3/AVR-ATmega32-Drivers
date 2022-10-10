@@ -8,17 +8,10 @@
  * Date 	   : 5/10/2022(October)
  *******************************************************************************/
 #include "adc.h"
-/***********************************************
- * Settings
- ***********************************************/
-ADC_ConfigType g_adcconfig = { INTERNAL, FCPU_8 };
 /***********************************************/
 uint16 g_adcresult = 0;
 /**This functions initializes the ADCPeripheral and sets it up for the given settings in the Configuration structure**/
 void ADC_init(ADC_ConfigType *config) {
-
-	/**Taking System settings for other functions**/
-	g_adcconfig = *config;
 
 	/**Setting Reference Voltage**/
 
