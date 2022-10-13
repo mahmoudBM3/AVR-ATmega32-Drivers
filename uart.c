@@ -1,7 +1,12 @@
+
+
 #include<avr/io.h>
 #include"uart.h"
 #include"common_macros.h"
+UART_ConfigType g_uartconfig;
+
 void UART_init(UART_ConfigType *config) {
+	g_uartconfig=*config;
 	/**Enabling Double speed mode*/
 	SET_BIT(UCSRA, U2X);
 	/**Enabling Receiving and Transmitting*/
@@ -21,7 +26,7 @@ void UART_init(UART_ConfigType *config) {
 	CLEAR_BIT(UCSRC, UCSZ1);
 	CLEAR_BIT(UCSRC, UCSZ0);
 	/**Selecting the BAUD Rate*/
-	uint8 UBRR_value = ((uint32) F_CPU / (8 * config->UART_BaudRate) - 1);
+	uint16 UBRR_value = ((uint32) F_CPU / (8 * config->UART_BaudRate) - 1);
 	UBRRL=UBRR_value;
 	UBRRH=UBRR_value>>8;
 
@@ -37,4 +42,21 @@ uint8 UART_receiveByte(void) {
 	while (BIT_IS_CLEAR(UCSRA, RXC))
 		;
 	return UDR;
+}
+void UART_sendString(char str[]){
+	uint8 count=0;
+	while(str[count]!='#'){
+		UART_sendByte(str[count]);
+		count++;
+	}
+	return;
+}
+void UART_receiveString(char str[]){
+	uint8 count=0;
+		while(str[count]!='#'){
+			str[count]=UART_receiveByte();
+			count++;
+		}
+		str[count]='\0';
+		return;
 }
