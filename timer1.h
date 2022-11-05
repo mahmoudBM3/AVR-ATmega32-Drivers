@@ -48,4 +48,5 @@ void Timer1_deinit(void);
  * @param callbackptr
  */
 void Timer1_setCallBack(void (*callbackptr)(void));
+void Timer1_countSeconds(uint8 seconds);
 #endif /* TIMER1_H_ */

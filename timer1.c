@@ -12,16 +12,39 @@
 #include"common_macros.h"
 #include<avr/interrupt.h>
 static volatile void (*g_callbackptr)(void) = NULL_PTR;
+static volatile uint8 num_of_seconds = 0;
+static volatile uint8 tick = 0;
+static volatile uint8 executionflag = 1;
 ISR(TIMER1_OVF_vect) {
-	if(g_callbackptr!=NULL_PTR){
-		g_callbackptr();
+	tick++;
+	if (tick == num_of_seconds) {
+		if (g_callbackptr != NULL_PTR) {
+			tick = 0;
+			if (executionflag == 1) {
+				executionflag = 0;
+				g_callbackptr();
+			}
+		}
 	}
-
 }
 ISR(TIMER1_COMPA_vect) {
-	if(g_callbackptr!=NULL_PTR){
-		g_callbackptr();
+	tick++;
+	if (tick == num_of_seconds) {
+		if (g_callbackptr != NULL_PTR) {
+			tick = 0;
+			if (executionflag == 1) {
+				executionflag = 0;
+				g_callbackptr();
+			}
+		}
 	}
+}
+void Timer1_countSeconds(uint8 seconds) {
+	executionflag = 1;
+	tick = 0;
+	TCNT1 = 0;
+	num_of_seconds = seconds;
+
 }
 void Timer1_init(const Timer1_ConfigType *config) {
 	/**TCCR1A Initialization**/
@@ -49,7 +72,7 @@ void Timer1_init(const Timer1_ConfigType *config) {
 	TCNT1 = config->initial_value;
 	OCR1A = config->compare_value;
 	/**Selecting The Interrupt Mode**/
-	SET_BIT(SREG,7);
+	SET_BIT(SREG, 7);
 	if (config->Timer1_Mode == TIMER1_NORMAL) {
 		CLEAR_BIT(TIMSK, OCIE1A);
 		SET_BIT(TIMSK, TOIE1);
@@ -60,10 +83,10 @@ void Timer1_init(const Timer1_ConfigType *config) {
 
 }
 void Timer1_deinit(void) {
-/**Clearing all the Timer registers**/
+	/**Clearing all the Timer registers**/
 	TCCR1A = 0;
 	TCCR1B = 0;
-	TIMSK=0;
+	TIMSK = 0;
 	TCNT1 = 0;
 	OCR1A = 0;
 }
